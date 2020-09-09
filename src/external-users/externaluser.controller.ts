@@ -37,6 +37,12 @@ export class ExternaluserController {
     return user;
   }
 
+  // @Get('/email/:useremail')
+  // public async getExternalUserByEmail(@Param('useremail') userEmail: string) {
+  //   const user = await this.externalUsersService.findByEmail(userEmail);
+  //   return user;
+  // }
+
   @Patch('/edit/:userId')
   public async editExternalUser(
     @Body() createExternalUserDTO: CreateExternalUserDTO,

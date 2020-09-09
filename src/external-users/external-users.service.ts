@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Externalusers } from './external-user.entity';
 import { CreateExternalUserDTO } from './dto/create-external-user.dto';
 import { ExternalUserRepository } from './external-user.repository';
+import { globalconstants } from '../constants';
 const bcrypt = require('bcrypt');
-const saltRounds = 10;
+
 
 @Injectable()
 export class ExternalUsersService {
@@ -18,7 +19,8 @@ export class ExternalUsersService {
   ): Promise<Externalusers> {
     createExternalUserDTO.password = bcrypt.hashSync(
       createExternalUserDTO.password,
-      saltRounds,null
+      globalconstants.saltRounds,
+      null,
     );
     return await this.externalUserRepository.createExternalUser(
       createExternalUserDTO,
@@ -31,6 +33,16 @@ export class ExternalUsersService {
 
   public async getExternalUser(userId: number): Promise<Externalusers> {
     const foundUser = await this.externalUserRepository.findOne(userId);
+    if (!foundUser) {
+      throw new NotFoundException('User not found');
+    }
+    return foundUser;
+  }
+
+  public async findByEmail(userEmail: string): Promise<Externalusers> {
+    const foundUser = await this.externalUserRepository.findOne({
+      where: { email: userEmail },
+    });
     if (!foundUser) {
       throw new NotFoundException('User not found');
     }

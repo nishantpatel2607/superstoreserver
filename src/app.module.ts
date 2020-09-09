@@ -7,6 +7,7 @@ import { ExternalUsersModule } from './external-users/external-users.module';
 import { ExternaluserController } from './external-users/externaluser.controller';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { InternalUsersModule } from './internal-users/internal-users.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UsersModule } from './users/users.module';
     ExternalUsersModule,
     AuthModule,
     UsersModule,
+    InternalUsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

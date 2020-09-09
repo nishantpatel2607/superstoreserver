@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { ExternalUsersService } from 'src/external-users/external-users.service';
+import { globalconstants } from 'src/constants';
+const bcrypt = require('bcrypt');
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
+    private externalUsersService: ExternalUsersService,
     private jwtService: JwtService,
   ) {}
 
@@ -16,11 +20,12 @@ export class AuthService {
   ): Promise<any> {
     let user;
     if (external) {
-      user = await this.usersService.findExtOne(username);
+      user = await this.externalUsersService.findByEmail(username);
     } else {
       user = await this.usersService.findIntOne(username);
     }
-    if (user && user.password === pass) {
+    let pass1 = bcrypt.hashSync(pass, globalconstants.saltRounds, null);
+    if (user && bcrypt.compare(user.password,pass1)) {
       const { password, ...result } = user;
       return result;
     }

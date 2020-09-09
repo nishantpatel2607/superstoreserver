@@ -8,6 +8,7 @@ import { ExternaluserController } from './externaluser.controller';
 @Module({
   imports: [TypeOrmModule.forFeature([ExternalUserRepository])],
   providers: [ExternalUsersService],
+  exports:[ExternalUsersService],
   controllers: [ExternaluserController],
 })
 export class ExternalUsersModule {}
