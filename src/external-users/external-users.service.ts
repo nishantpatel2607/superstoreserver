@@ -1,11 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Externalusers } from './external-user.entity';
 import { CreateExternalUserDTO } from './dto/create-external-user.dto';
 import { ExternalUserRepository } from './external-user.repository';
 import { globalconstants } from '../constants';
+import { Not } from 'typeorm';
 const bcrypt = require('bcrypt');
-
 
 @Injectable()
 export class ExternalUsersService {
@@ -17,6 +21,13 @@ export class ExternalUsersService {
   public async createExternalUser(
     createExternalUserDTO: CreateExternalUserDTO,
   ): Promise<Externalusers> {
+    const foundUser = await this.externalUserRepository.findOne({
+      where: { email: createExternalUserDTO.email },
+    });
+    if (foundUser) {
+      throw new ConflictException('email already found');
+    }
+
     createExternalUserDTO.password = bcrypt.hashSync(
       createExternalUserDTO.password,
       globalconstants.saltRounds,
@@ -32,7 +43,10 @@ export class ExternalUsersService {
   }
 
   public async getExternalUser(userId: number): Promise<Externalusers> {
-    const foundUser = await this.externalUserRepository.findOne(userId);
+    console.log(userId);
+    const foundUser = await this.externalUserRepository.findOne({
+      where: { id: userId },
+    });
     if (!foundUser) {
       throw new NotFoundException('User not found');
     }
@@ -51,17 +65,24 @@ export class ExternalUsersService {
 
   public async editExternalUser(
     userId: number,
-    createExternalUserDTO: CreateExternalUserDTO,
-  ): Promise<Externalusers> {
+    editExternalUserDTO: CreateExternalUserDTO,
+  ): Promise<Externalusers> {console.log(userId);
     const editedExternalUser = await this.externalUserRepository.findOne(
-      userId,
+      userId
     );
     if (!editedExternalUser) {
       throw new NotFoundException('User not found');
     }
 
+    const foundUser = await this.externalUserRepository.findOne({
+      where: [{ email: editExternalUserDTO.email ,id: Not(userId) }],
+    });
+    if (foundUser) {
+      throw new ConflictException('email already found');
+    }
+
     return this.externalUserRepository.editExternalUser(
-      createExternalUserDTO,
+      editExternalUserDTO,
       editedExternalUser,
     );
   }
