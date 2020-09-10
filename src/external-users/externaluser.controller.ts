@@ -31,8 +31,8 @@ export class ExternaluserController {
     return users;
   }
 
-  @Get(':userId')
-  public async getExternalUser(@Param('userId') userId: number) {console.log('here');
+  @Get('/:userId')
+  public async getExternalUser(@Param('userId') userId: number) {
     const user = await this.externalUsersService.getExternalUser(userId);
     return user;
   }
