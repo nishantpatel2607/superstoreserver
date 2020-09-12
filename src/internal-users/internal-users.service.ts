@@ -22,7 +22,7 @@ export class InternalUsersService {
     createInternalUserDTO: CreateInternalUserDTO,
   ): Promise<Internalusers> {
     const foundUser = await this.externalUserRepository.findOne({
-      where: { email: createInternalUserDTO.userid },
+      where: { username: createInternalUserDTO.username },
     });
     if (foundUser) {
       throw new ConflictException('user name already found');
@@ -43,7 +43,7 @@ export class InternalUsersService {
   }
 
   public async getInternalUser(Id: number): Promise<Internalusers> {
-    console.log(Id);
+    
     const foundUser = await this.externalUserRepository.findOne({
       where: { id: Id },
     });
@@ -53,9 +53,10 @@ export class InternalUsersService {
     return foundUser;
   }
 
-  public async findByUserId(userId: string): Promise<Internalusers> {
+  public async findByUsername(username: string): Promise<Internalusers> {
+    
     const foundUser = await this.externalUserRepository.findOne({
-      where: { userid: userId },
+      where: { username: username },
     });
     if (!foundUser) {
       throw new NotFoundException('User not found');
@@ -73,11 +74,17 @@ export class InternalUsersService {
     }
 
     const foundUser = await this.externalUserRepository.findOne({
-      where: [{ userid: editInternalUserDTO.userid, id: Not(Id) }],
+      where: [{ username: editInternalUserDTO.username, id: Not(Id) }],
     });
     if (foundUser) {
       throw new ConflictException('user name already found');
     }
+
+     editInternalUserDTO.password = bcrypt.hashSync(
+       editInternalUserDTO.password,
+       globalconstants.saltRounds,
+       null,
+     );
 
     return this.externalUserRepository.editInternalUser(
       editInternalUserDTO,

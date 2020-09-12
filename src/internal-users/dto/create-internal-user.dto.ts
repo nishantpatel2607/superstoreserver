@@ -11,7 +11,7 @@ export class CreateInternalUserDTO {
 
   @IsString()
   @MaxLength(255)
-  userid: string;
+  username: string;
 
   @IsString()
   password: string;

@@ -43,7 +43,7 @@ export class ExternalUsersService {
   }
 
   public async getExternalUser(userId: number): Promise<Externalusers> {
-    console.log(userId);
+  
     const foundUser = await this.externalUserRepository.findOne({
       where: { id: userId },
     });
@@ -66,7 +66,7 @@ export class ExternalUsersService {
   public async editExternalUser(
     userId: number,
     editExternalUserDTO: CreateExternalUserDTO,
-  ): Promise<Externalusers> {console.log(userId);
+  ): Promise<Externalusers> {
     const editedExternalUser = await this.externalUserRepository.findOne(
       userId
     );
@@ -80,6 +80,12 @@ export class ExternalUsersService {
     if (foundUser) {
       throw new ConflictException('email already found');
     }
+
+    editExternalUserDTO.password = bcrypt.hashSync(
+      editExternalUserDTO.password,
+      globalconstants.saltRounds,
+      null,
+    );
 
     return this.externalUserRepository.editExternalUser(
       editExternalUserDTO,

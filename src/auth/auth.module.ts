@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { ExternalUsersModule } from 'src/external-users/external-users.module';
+import { InternalUsersModule } from 'src/internal-users/internal-users.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ExternalUsersModule } from 'src/external-users/external-users.module';
     }),
     UsersModule,
     ExternalUsersModule,
+    InternalUsersModule
   ],
   providers: [AuthService, LocalExternalStrategy, LocalInternalStrategy, JwtStrategy],
   exports: [AuthService],

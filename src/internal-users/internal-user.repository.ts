@@ -7,9 +7,9 @@ export class InternalUserRepository extends Repository<Internalusers> {
   public async createInternalUser(
     createInternalUserDTO: CreateInternalUserDTO,
   ): Promise<Internalusers> {
-    const { userid, firstname, lastname, password } = createInternalUserDTO;
+    const { username, firstname, lastname, password } = createInternalUserDTO;
     const internalUser = new Internalusers();
-    internalUser.userid = userid;
+    internalUser.username = username;
     internalUser.firstname = firstname;
     internalUser.lastname = lastname;
     internalUser.password = password;
@@ -22,8 +22,8 @@ export class InternalUserRepository extends Repository<Internalusers> {
     createInternalUserDTO: CreateInternalUserDTO,
     editedInternalUser: Internalusers,
   ): Promise<Internalusers> {
-    const { userid, firstname, lastname, password } = createInternalUserDTO;
-    editedInternalUser.userid = userid;
+    const { username, firstname, lastname, password } = createInternalUserDTO;
+    editedInternalUser.username = username;
     editedInternalUser.firstname = firstname;
     editedInternalUser.lastname = lastname;
     editedInternalUser.password = password;

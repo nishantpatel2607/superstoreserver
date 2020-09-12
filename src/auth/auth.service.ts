@@ -24,7 +24,7 @@ export class AuthService {
     if (external) {
       user = await this.externalUsersService.findByEmail(username);
     } else {
-      user = await this.internalUsersService.findByUserId(username);
+      user = await this.internalUsersService.findByUsername(username);
     }
     let pass1 = bcrypt.hashSync(pass, globalconstants.saltRounds, null);
     if (user && bcrypt.compare(user.password, pass1)) {

@@ -12,7 +12,7 @@ export class Internalusers extends BaseEntity {
   lastname: string;
 
   @Column()
-  userid: string;
+  username: string;
 
   @Column()
   password: string;

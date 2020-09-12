@@ -11,7 +11,7 @@ import { InternalUsersService } from './internal-users.service';
 import { CreateInternalUserDTO } from './dto/create-internal-user.dto';
 import { Internalusers } from './internal-user.entity';
 
-@Controller('internal-users')
+@Controller('internaluser')
 export class InternalUsersController {
   constructor(private internalUsersService: InternalUsersService) {}
 
