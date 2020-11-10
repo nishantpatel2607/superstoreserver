@@ -15,13 +15,13 @@ const bcrypt = require('bcrypt');
 export class InternalUsersService {
   constructor(
     @InjectRepository(InternalUserRepository)
-    private externalUserRepository: InternalUserRepository,
+    private internalUserRepository: InternalUserRepository,
   ) {}
 
   public async createInternalUser(
     createInternalUserDTO: CreateInternalUserDTO,
   ): Promise<Internalusers> {
-    const foundUser = await this.externalUserRepository.findOne({
+    const foundUser = await this.internalUserRepository.findOne({
       where: { username: createInternalUserDTO.username },
     });
     if (foundUser) {
@@ -33,18 +33,18 @@ export class InternalUsersService {
       globalconstants.saltRounds,
       null,
     );
-    return await this.externalUserRepository.createInternalUser(
+    return await this.internalUserRepository.createInternalUser(
       createInternalUserDTO,
     );
   }
 
   public async getInternalUsers(): Promise<Internalusers[]> {
-    return await this.externalUserRepository.find();
+    return await this.internalUserRepository.find();
   }
 
   public async getInternalUser(Id: number): Promise<Internalusers> {
     
-    const foundUser = await this.externalUserRepository.findOne({
+    const foundUser = await this.internalUserRepository.findOne({
       where: { id: Id },
     });
     if (!foundUser) {
@@ -55,7 +55,7 @@ export class InternalUsersService {
 
   public async findByUsername(username: string): Promise<Internalusers> {
     
-    const foundUser = await this.externalUserRepository.findOne({
+    const foundUser = await this.internalUserRepository.findOne({
       where: { username: username },
     });
     if (!foundUser) {
@@ -68,12 +68,12 @@ export class InternalUsersService {
     Id: number,
     editInternalUserDTO: CreateInternalUserDTO,
   ): Promise<Internalusers> {
-    const editedInternalUser = await this.externalUserRepository.findOne(Id);
+    const editedInternalUser = await this.internalUserRepository.findOne(Id);
     if (!editedInternalUser) {
       throw new NotFoundException('User not found');
     }
 
-    const foundUser = await this.externalUserRepository.findOne({
+    const foundUser = await this.internalUserRepository.findOne({
       where: [{ username: editInternalUserDTO.username, id: Not(Id) }],
     });
     if (foundUser) {
@@ -86,13 +86,13 @@ export class InternalUsersService {
        null,
      );
 
-    return this.externalUserRepository.editInternalUser(
+    return this.internalUserRepository.editInternalUser(
       editInternalUserDTO,
       editedInternalUser,
     );
   }
 
   public async deleteInternalUser(Id: number): Promise<void> {
-    await this.externalUserRepository.delete(Id);
+    await this.internalUserRepository.delete(Id);
   }
 }

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { ExternalUsersService } from '../external-users/external-users.service';
 import { globalconstants } from '../constants';
@@ -9,7 +8,6 @@ const bcrypt = require('bcrypt');
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
     private externalUsersService: ExternalUsersService,
     private internalUsersService: InternalUsersService,
     private jwtService: JwtService,
